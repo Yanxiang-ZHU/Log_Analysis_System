@@ -3,10 +3,11 @@
 
 #include <string>
 
+
 struct LogNode {
-	std::string timestamp; // "YYYY-MM-DD HH:MM:SS"
-	long long timeKey; // YYYYMMDDHHMMSS as number for fast compare
-	std::string level; // INFO/WARN/ERROR
+	std::string timestamp;
+	long long timeKey; // number for fast compare
+	std::string level;
 	std::string module;
 	std::string message;
 	LogNode* prev;
@@ -24,7 +25,7 @@ public:
 	void clear();
 	void push_back(LogNode* node);
 	void push_front(LogNode* node);
-	LogNode* remove_at(int index); // 1-based, returns removed node (caller should delete)
+	LogNode* remove_at(int index); // returns removed node (caller should delete)
 	int size() const;
 	LogNode* head() const;
 	LogNode* tail() const;
@@ -39,4 +40,4 @@ private:
 	int size_;
 };
 
-#endif // LINKEDLIST_H
+#endif

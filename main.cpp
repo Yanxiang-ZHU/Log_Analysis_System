@@ -9,7 +9,6 @@
 #include "KMP.h"
 #include "UndoStack.h"
 
-// Global system state
 static LinkedList* g_list = nullptr;
 static CircularQueue* g_queue = nullptr;
 static BST* g_bst = nullptr;
@@ -31,7 +30,7 @@ std::string trim(const std::string& s) {
 
 // parse a log line into components; returns nullptr on failure
 LogNode* parseLogLine(const std::string& line) {
-	// format: [YYYY-MM-DD HH:MM:SS] LEVEL MODULE message...
+	// [YYYY-MM-DD HH:MM:SS]
 	size_t l = line.find(']');
 	if (l == std::string::npos) return nullptr;
 	std::string ts = line.substr(1, l-1);
@@ -70,6 +69,7 @@ void cmdLoad(const std::string& filename) {
 	std::cout << "Loaded " << count << " entries\n";
 }
 
+
 // FILTER start end (with underscore)
 void cmdFilter(const std::string& sstart, const std::string& send) {
 	ensureInit();
@@ -77,12 +77,12 @@ void cmdFilter(const std::string& sstart, const std::string& send) {
 	std::string ed = send; for (char& c: ed) if (c=='_') c=' ';
 	long long kstart = LinkedList::parseTimeKey(st);
 	long long kend = LinkedList::parseTimeKey(ed);
-	LogNode* cur = g_list ? g_list->head() : nullptr;
-	while (cur) {
-		if (cur->timeKey >= kstart && cur->timeKey <= kend) {
-			std::cout << LinkedList::formatFullLine(cur) << "\n";
+	LogNode* p = g_list ? g_list->head() : nullptr;
+	while (p) {
+		if (p->timeKey >= kstart && p->timeKey <= kend) {
+			std::cout << LinkedList::formatFullLine(p) << "\n";
 		}
-		cur = cur->next;
+		p = p->next;
 	}
 }
 
@@ -90,18 +90,18 @@ void cmdFilter(const std::string& sstart, const std::string& send) {
 void cmdSearch(const std::string& keyword) {
 	ensureInit();
 	int found = 0;
-	LogNode* cur = g_list ? g_list->head() : nullptr;
-	while (cur) {
-		if (KMP::contains(cur->message, keyword)) {
+	LogNode* p = g_list ? g_list->head() : nullptr;
+	while (p) {
+		if (KMP::contains(p->message, keyword)) {
 			++found;
 		}
-		cur = cur->next;
+		p = p->next;
 	}
 	std::cout << "Found " << found << " match(es)\n";
-	cur = g_list ? g_list->head() : nullptr;
-	while (cur) {
-		if (KMP::contains(cur->message, keyword)) std::cout << LinkedList::formatFullLine(cur) << "\n";
-		cur = cur->next;
+	p = g_list ? g_list->head() : nullptr;
+	while (p) {
+		if (KMP::contains(p->message, keyword)) std::cout << LinkedList::formatFullLine(p) << "\n";
+		p = p->next;
 	}
 }
 
@@ -181,6 +181,8 @@ void cmdRecent(int n) {
 	delete [] buf;
 }
 
+
+////////////////////////////////////////////////////////////
 int main(int argc, char** argv) {
 	ensureInit();
 	std::string line;

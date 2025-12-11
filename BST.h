@@ -22,8 +22,7 @@ public:
     BSTNode* find(const std::string& module) const;
     BSTNode* root() const;
     int nodeCount() const;
-    void inorderCollect(BSTNode** out); // fill array with node pointers in-order; array must have size nodeCount()
-
+    void inorderCollect(BSTNode** out);
 private:
     BSTNode* root_;
     void clearNode(BSTNode* node);
@@ -33,4 +32,4 @@ private:
     void collectInorder(BSTNode* node, BSTNode** out, int& idx);
 };
 
-#endif // BST_H
+#endif

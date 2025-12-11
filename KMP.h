@@ -11,4 +11,4 @@ public:
     static void computeLPS(const std::string& pat, int* lps);
 };
 
-#endif // KMP_H
+#endif

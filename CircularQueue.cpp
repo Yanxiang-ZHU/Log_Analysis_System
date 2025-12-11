@@ -22,16 +22,16 @@ void CircularQueue::push(LogNode* node) {
 void CircularQueue::removeNode(LogNode* node) {
 	if (!node || cnt==0) return;
 	// compact into new array
-	LogNode* tmp[CAP];
-	int idx = 0;
+	LogNode* tmpArr[CAP];
+	int k = 0;
 	for (int i = 0, p = head; i < cnt; ++i, p = (p+1)%CAP) {
-		if (arr[p] != node) tmp[idx++] = arr[p];
+		if (arr[p] != node) tmpArr[k++] = arr[p];
 	}
 	// write back
 	std::memset(arr, 0, sizeof(arr));
 	head = 0; tail = 0; cnt = 0;
-	for (int i = 0; i < idx; ++i) {
-		arr[tail++] = tmp[i];
+	for (int t = 0; t < k; ++t) {
+		arr[tail++] = tmpArr[t];
 		++cnt;
 	}
 }

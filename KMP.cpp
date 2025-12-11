@@ -22,15 +22,15 @@ bool KMP::contains(const std::string& text, const std::string& pattern) {
     int m = (int)pattern.size();
     if (m == 0) return true;
     if (n < m) return false;
-    int* lps = new int[m];
-    computeLPS(pattern, lps);
+    int* lpsArr = new int[m];
+    computeLPS(pattern, lpsArr);
     int i = 0, j = 0;
     while (i < n) {
-        if (text[i] == pattern[j]) { ++i; ++j; if (j==m) { delete[] lps; return true; } }
+        if (text[i] == pattern[j]) { ++i; ++j; if (j==m) { delete[] lpsArr; return true; } }
         else {
-            if (j != 0) j = lps[j-1]; else ++i;
+            if (j != 0) j = lpsArr[j-1]; else ++i;
         }
     }
-    delete[] lps;
+    delete[] lpsArr;
     return false;
 }

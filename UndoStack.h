@@ -30,8 +30,8 @@ private:
     int cnt;
 };
 
-// Helper: deep-copy structures
+// deep-copy structures
 Snapshot* makeSnapshot(LinkedList* list, BST* bst, CircularQueue* queue);
 void freeSnapshot(Snapshot* s);
 
-#endif // UNDOSTACK_H
+#endif

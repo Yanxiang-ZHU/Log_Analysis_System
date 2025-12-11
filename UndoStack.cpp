@@ -36,26 +36,26 @@ Snapshot* makeSnapshot(LinkedList* list, BST* bst, CircularQueue* queue) {
     s->list = new LinkedList();
     // mapping original -> copied pointers via arrays
     int n = list ? list->size() : 0;
-    LogNode** origs = nullptr;
-    LogNode** copies = nullptr;
+    LogNode** origArr = nullptr;
+    LogNode** copyArr = nullptr;
     if (n>0) {
-        origs = new LogNode*[n]; copies = new LogNode*[n];
-        LogNode* cur = list->head(); int idx = 0;
+        origArr = new LogNode*[n]; copyArr = new LogNode*[n];
+        LogNode* cur = list->head(); int ii = 0;
         while (cur) {
-            origs[idx] = cur;
-            copies[idx] = new LogNode(cur->timestamp, cur->timeKey, cur->level, cur->module, cur->message);
-            s->list->push_back(copies[idx]);
-            cur = cur->next; ++idx;
+            origArr[ii] = cur;
+            copyArr[ii] = new LogNode(cur->timestamp, cur->timeKey, cur->level, cur->module, cur->message);
+            s->list->push_back(copyArr[ii]);
+            cur = cur->next; ++ii;
         }
     }
-    // copy bst: naive simple rebuild from list
+
     s->bst = new BST();
     if (n>0) {
         for (int i=0;i<n;++i) {
-            if (copies[i]->level == "ERROR") s->bst->insertError(copies[i]->module);
+            if (copyArr[i]->level == "ERROR") s->bst->insertError(copyArr[i]->module);
         }
     }
-    // copy queue: simple approach - copy last n items from copies array
+    // copy last n items from copies array
     s->queueSize = 0; s->queueArr = nullptr;
     if (queue && n>0) {
         int qsz = queue->size();
@@ -63,15 +63,15 @@ Snapshot* makeSnapshot(LinkedList* list, BST* bst, CircularQueue* queue) {
             int need = qsz < n ? qsz : n;
             s->queueArr = new LogNode*[need];
             s->queueSize = need;
-            // copy last 'need' nodes from copies array
+            // copy last 'need' nodes from copyArr array
             int start = n - need;
-            for (int i = 0; i < need; ++i) {
-                s->queueArr[i] = copies[start + i];
+            for (int t = 0; t < need; ++t) {
+                s->queueArr[t] = copyArr[start + t];
             }
         }
     }
-    if (origs) delete [] origs;
-    if (copies) delete [] copies;
+    if (origArr) delete [] origArr;
+    if (copyArr) delete [] copyArr;
     return s;
 }
 

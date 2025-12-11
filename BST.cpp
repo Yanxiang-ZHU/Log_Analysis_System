@@ -54,11 +54,11 @@ void BST::decOrRemove(BSTNode*& node, const std::string& module) {
 }
 
 BSTNode* BST::find(const std::string& module) const {
-    BSTNode* cur = root_;
-    while (cur) {
-        if (module < cur->module) cur = cur->left;
-        else if (module > cur->module) cur = cur->right;
-        else return cur;
+    BSTNode* p = root_;
+    while (p) {
+        if (module < p->module) p = p->left;
+        else if (module > p->module) p = p->right;
+        else return p;
     }
     return nullptr;
 }

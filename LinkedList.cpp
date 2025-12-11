@@ -3,22 +3,29 @@
 #include <iomanip>
 #include <cstdlib>
 
-LinkedList::LinkedList() : head_(nullptr), tail_(nullptr), size_(0) {}
+LinkedList::LinkedList() : head_(nullptr), tail_(nullptr), size_(0)
+{
+}
 
-LinkedList::~LinkedList() { clear(); }
+LinkedList::~LinkedList()
+{
+	clear();
+}
 
-void LinkedList::clear() {
-	LogNode* cur = head_;
-	while (cur) {
-		LogNode* nxt = cur->next;
-		delete cur;
-		cur = nxt;
+void LinkedList::clear()
+{
+	LogNode* p = head_;
+	while (p) {
+		LogNode* nextNode = p->next; // save next
+		delete p;
+		p = nextNode;
 	}
 	head_ = tail_ = nullptr;
 	size_ = 0;
 }
 
-void LinkedList::push_back(LogNode* node) {
+void LinkedList::push_back(LogNode* node)
+{
 	if (!node) return;
 	node->prev = node->next = nullptr;
 	if (!tail_) {
@@ -31,7 +38,10 @@ void LinkedList::push_back(LogNode* node) {
 	++size_;
 }
 
-void LinkedList::push_front(LogNode* node) {
+
+
+void LinkedList::push_front(LogNode* node)
+{
 	if (!node) return;
 	node->prev = node->next = nullptr;
 	if (!head_) {
@@ -44,24 +54,26 @@ void LinkedList::push_front(LogNode* node) {
 	++size_;
 }
 
-LogNode* LinkedList::remove_at(int index) {
+LogNode* LinkedList::remove_at(int index)
+{
 	if (index < 1 || index > size_) return nullptr;
-	LogNode* cur = head_;
-	int i = 1;
-	while (i < index) { cur = cur->next; ++i; }
-	if (cur->prev) cur->prev->next = cur->next; else head_ = cur->next;
-	if (cur->next) cur->next->prev = cur->prev; else tail_ = cur->prev;
-	cur->prev = cur->next = nullptr;
+	LogNode* p = head_;
+	int ii = 1;
+	while (ii < index) { p = p->next; ++ii; }
+	if (p->prev) p->prev->next = p->next; else head_ = p->next;
+	if (p->next) p->next->prev = p->prev; else tail_ = p->prev;
+	p->prev = p->next = nullptr;
 	--size_;
-	return cur;
+	return p;
 }
 
 int LinkedList::size() const { return size_; }
 LogNode* LinkedList::head() const { return head_; }
 LogNode* LinkedList::tail() const { return tail_; }
 
-// Convert timestamp "YYYY-MM-DD HH:MM:SS" to long long YYYYMMDDHHMMSS
-long long LinkedList::parseTimeKey(const std::string& ts) {
+// Convert  "YYYY-MM-DD HH:MM:SS" to long long YYYYMMDDHHMMSS
+long long LinkedList::parseTimeKey(const std::string& ts)
+{
 	// expect length >= 19
 	if (ts.size() < 19) return 0;
 	std::string s;
@@ -70,7 +82,8 @@ long long LinkedList::parseTimeKey(const std::string& ts) {
 	return std::atoll(s.c_str());
 }
 
-std::string LinkedList::formatFullLine(const LogNode* node) {
+std::string LinkedList::formatFullLine(const LogNode* node)
+{
 	if (!node) return std::string();
 	std::string out = "[" + node->timestamp + "] " + node->level + " " + node->module + " " + node->message;
 	return out;
